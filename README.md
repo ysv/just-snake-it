@@ -1,2 +1,2 @@
-# just-snake-it
+# PyIt
 🐍 Minimalistic python code analyzer
