@@ -1,3 +1,3 @@
-#!/usr/bin/env python
-from pylint import run_pyit
+#!/usr/bin/env python3
+from pyit import run_pyit
 run_pyit()
