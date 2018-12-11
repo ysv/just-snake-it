@@ -1,3 +1,7 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
+import sys
+sys.path.append('/Users/yaroslavsavchuk/Developer/pyit/')
+
 from pyit import run_pyit
 run_pyit()
+
