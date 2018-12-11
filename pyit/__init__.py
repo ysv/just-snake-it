@@ -4,7 +4,7 @@ import sys
 
 
 def run_pyit():
-    """run pylint"""
+    """run pyit"""
     from pyit.run import Run
 
     try:
