@@ -1,5 +1,5 @@
 {
-  "verbose": "false",
+  "verbose": "true",
   "some_int": 12,
   "cops": {
     "example_cop": {
