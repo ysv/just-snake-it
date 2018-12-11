@@ -24,3 +24,5 @@ class Run:
         abs_path = abspath(package)
         self.inspection_files = get_files_in(abs_path)
 
+    def lint(self):
+        pass
