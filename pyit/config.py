@@ -50,9 +50,10 @@ class Config:
         DEFAULT = {
             'verbose': False,
             'cops': {
-                'example_cop': {
+                'indentation_cop': {
                     'enabled': True
                 }
+
             }
         }
 

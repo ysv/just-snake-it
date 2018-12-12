@@ -13,10 +13,14 @@ def run_pyit():
     try:
         runners = []
         for arg in sys.argv[1:]:
-            runners.append(Run(arg))
+            runners.append(Run(arg, config))
 
         if config.value('verbose'):
             print_inspection_files(runners)
+
+        # Here we can start runners concurrently.
+        for runner in runners:
+            runner.lint()
 
     except KeyboardInterrupt:
         sys.exit(1)
