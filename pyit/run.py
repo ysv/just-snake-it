@@ -3,6 +3,11 @@
 
 from os import walk
 from os.path import isdir, join, splitext, abspath
+from tokenize import tokenize, untokenize, NUMBER, STRING, NAME, OP
+from io import BytesIO
+
+from pyit.cop import *
+from pyit.cops.indentation import *
 
 
 def get_files_in(root, extension='.py'):
@@ -18,11 +23,33 @@ def get_files_in(root, extension='.py'):
 
 
 class Run:
-    inspection_files = []
+    REGISTERED_COPS = [
+        IndentationCop,
+    ]
 
-    def __init__(self, package):
+    inspection_files = []
+    config = dict()
+    cops = []
+
+    def __init__(self, package, config):
         abs_path = abspath(package)
         self.inspection_files = get_files_in(abs_path)
+        self.config = config
+        for cop in self.REGISTERED_COPS:
+            cop_name = cop.name()
+            cop_conf = config.value('cops').get(cop_name, None)
+            self.cops.append(cop(cop_conf))
+
 
     def lint(self):
-        pass
+        for cop in self.cops:
+            for file in self.inspection_files:
+                self.lint_file(cop, file)
+
+    def lint_file(self, cop, file):
+        if ITokenCop in cop.__implements__:
+            readline = open(file, 'rb').__next__
+            tokens = tokenize(readline)
+            cop.process_tokens(tokens)
+        if IRawFileCop in cop.__implements__:
+            pass
