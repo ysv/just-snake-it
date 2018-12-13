@@ -1,4 +1,5 @@
 import sys
+from pyit.utils import COLORS, RESET
 # import code
 # code.interact(local=dict(globals(), **locals()))
 
@@ -23,7 +24,7 @@ def run_pyit():
             runner.lint()
 
         # Newline before printing offences.
-        print('\n')
+        print(COLORS[RESET], '\n')
 
         for runner in runners:
             runner.print_offences()
