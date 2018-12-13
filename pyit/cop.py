@@ -20,10 +20,10 @@ class ICop:
 
 
 class ITokenCop(ICop):
-    def process_tokens(self, tokens):
+    def process_tokens(self, tokens, filename):
         """Method receives generator of tokens and process them one by one."""
 
 
 class IRawFileCop(ICop):
-    def process_file(self, lines):
+    def process_file(self, lines, filename):
         """Method receives list of file lines and process them one by one."""

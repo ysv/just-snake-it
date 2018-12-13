@@ -4,6 +4,9 @@
   "cops": {
     "indentation_cop": {
       "enabled" : true
+    },
+    "tab_indentation_cop": {
+      "enabled" : false
     }
   }
 }

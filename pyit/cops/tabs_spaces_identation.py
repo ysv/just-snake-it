@@ -2,7 +2,7 @@ from pyit.cop import IRawFileCop, Cop
 from pyit.offence import Offence
 
 
-class TabSpacesIndentationCop(Cop):
+class MixedIndentationCop(Cop):
 
     COP_CONFIG = {
         "allow_tabs": False,
@@ -27,7 +27,7 @@ class TabSpacesIndentationCop(Cop):
     def allow_tabs(self):
         return self.cop_conf.get('allow_tabs', False)
 
-    def process_file(self, lines):
+    def process_file(self, lines, filename):
         if not self.processable():
             return
         initial_ident_for_file = None
