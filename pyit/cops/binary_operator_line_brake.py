@@ -1,6 +1,6 @@
 from pyit.cop import ITokenCop, Cop
 from pyit.offence import Offence
-from pyit.helpers import *
+from pyit.utils import *
 from token import *
 
 

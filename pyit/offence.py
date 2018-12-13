@@ -1,3 +1,5 @@
+from pyit.utils import *
+
 class Offence:
     # TODO: severity should be in separate class.
     # By design it could be
@@ -10,14 +12,14 @@ class Offence:
     filename = str()
 
     SEVERITY_COLORS = {
-        'refactor': '\033[1;36m',    # Cyan.
-        'convention': '\033[1;34m',  # Blue.
-        'warning': '\033[93m',       # Yellow.
-        'error':   '\033[91m'        # Red.
+        'refactor':   COLORS[CYAN],
+        'convention': COLORS[BLUE],
+        'warning':    COLORS[YELLOW],
+        'error':      COLORS[RED]
     }
 
-    RESET_COLOR = "\033[0;0m"
-    BOLD_COLOR = "\033[;1m"
+    RESET_COLOR = COLORS[RESET]
+    BOLD_COLOR = COLORS[BOLD]
 
     def __init__(self, cop_name, location, message, filename=None, severity='refactor'):
         self.cop_name = cop_name

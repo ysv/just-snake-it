@@ -34,7 +34,7 @@ class LineLengthCop(Cop):
         for i, line in enumerate(lines):
             if len(line) < self.max_length():
                 continue
-            message = "Line is too long. Brakes " + str(self.max_length())\
+            message = "Line is too long (" + str(len(line)) + " char). Brakes " + str(self.max_length())\
                       + " char limit"
             off = Offence(
                 cop_name=self.name(),
