@@ -3,6 +3,9 @@ from pyit.offence import Offence
 
 
 class TabIndentationCop(Cop):
+
+    COP_CONFIG = {}
+
     TAB_INDENT = '\t'
 
     __implements__ = [IRawFileCop]
@@ -10,9 +13,9 @@ class TabIndentationCop(Cop):
 
     def __init__(self, cop_conf=None):
         if cop_conf is None:
-            self.cop_conf = self.DEFAULT_CONFIG
+            self.cop_conf = {**self.DEFAULT_CONFIG, **self.COP_CONFIG}
         else:
-            self.cop_conf = {**self.DEFAULT_CONFIG, **cop_conf}
+            self.cop_conf = {**self.DEFAULT_CONFIG, **self.COP_CONFIG, **cop_conf}
 
     @classmethod
     def name(cls):
@@ -28,7 +31,7 @@ class TabIndentationCop(Cop):
                 off = Offence(
                     cop_name=self.name(),
                     location=(i, tab_index),
-                    message="Indentation contains tab",
+                    message="Indentation contains tab.",
                     filename=filename,
                     severity='warning'
                 )

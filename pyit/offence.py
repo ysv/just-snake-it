@@ -29,7 +29,7 @@ class Offence:
     def __str__(self):
         color = self.SEVERITY_COLORS[self.severity]
         formatted_output = self.BOLD_COLOR + self.cop_name + ' says:' + '\n' \
-                          + color + self.message + ' in: ' \
+                          + color + self.message + '\n' \
                           + self.filename + str(self.location) \
                           + '\n' + self.RESET_COLOR
 

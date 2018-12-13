@@ -2,11 +2,11 @@
   "verbose": "true",
   "some_int": 12,
   "cops": {
-    "indentation_cop": {
+    "mixed_indentation_cop": {
       "enabled" : true
     },
     "tab_indentation_cop": {
-      "enabled" : false
+      "enabled" : true
     }
   }
 }
