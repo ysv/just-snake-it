@@ -9,8 +9,7 @@ from pyit.cop import *
 from pyit.cops.tab_indentation import TabIndentationCop
 from pyit.cops.mixed_indentation import MixedIndentationCop
 from pyit.cops.space_indentation import SpaceIndentationCop
-
-
+from pyit.cops.line_length import LineLengthCop
 
 
 def get_files_in(root, extension='.py'):
@@ -29,7 +28,8 @@ class Run:
     REGISTERED_COPS = [
         TabIndentationCop,
         MixedIndentationCop,
-        SpaceIndentationCop
+        SpaceIndentationCop,
+        LineLengthCop
     ]
 
     inspection_files = []
@@ -50,8 +50,6 @@ class Run:
         for cop in self.cops:
             for file in self.inspection_files:
                 self.lint_file(cop, file)
-                # import code
-                # code.interact(local=dict(globals(), **locals()))
 
     def lint_file(self, cop, file):
         if ITokenCop in cop.__implements__:
