@@ -7,6 +7,8 @@ from tokenize import tokenize, untokenize, NUMBER, STRING, NAME, OP
 
 from pyit.cop import *
 from pyit.cops.tab_indentation import TabIndentationCop
+from pyit.cops.mixed_indentation import MixedIndentationCop
+
 
 
 def get_files_in(root, extension='.py'):
@@ -23,7 +25,8 @@ def get_files_in(root, extension='.py'):
 
 class Run:
     REGISTERED_COPS = [
-        TabIndentationCop
+        TabIndentationCop,
+        MixedIndentationCop
     ]
 
     inspection_files = []
@@ -44,8 +47,8 @@ class Run:
         for cop in self.cops:
             for file in self.inspection_files:
                 self.lint_file(cop, file)
-                import code
-                code.interact(local=dict(globals(), **locals()))
+                # import code
+                # code.interact(local=dict(globals(), **locals()))
 
     def lint_file(self, cop, file):
         if ITokenCop in cop.__implements__:
