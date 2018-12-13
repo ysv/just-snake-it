@@ -4,12 +4,9 @@
 from os import walk
 from os.path import isdir, join, splitext, abspath
 from tokenize import tokenize, untokenize, NUMBER, STRING, NAME, OP
-from io import BytesIO
 
 from pyit.cop import *
-from pyit.cops.indentation import IndentationCop
-from pyit.cops.tabs_spaces_identation import TabSpacesIndentationCop
-
+from pyit.cops.tab_indentation import TabIndentationCop
 
 
 def get_files_in(root, extension='.py'):
@@ -26,8 +23,7 @@ def get_files_in(root, extension='.py'):
 
 class Run:
     REGISTERED_COPS = [
-        IndentationCop,
-        TabSpacesIndentationCop
+        TabIndentationCop
     ]
 
     inspection_files = []
@@ -55,8 +51,13 @@ class Run:
         if ITokenCop in cop.__implements__:
             readline = open(file, 'rb').__next__
             tokens = tokenize(readline)
-            cop.process_tokens(tokens)
+            cop.process_tokens(tokens, file)
         if IRawFileCop in cop.__implements__:
             f = open(file, 'r')
             lines = f.read().splitlines()
-            cop.process_file(lines)
+            cop.process_file(lines, file)
+
+    def print_offences(self):
+        for cop in self.cops:
+            for off in cop.offences:
+                print(off)

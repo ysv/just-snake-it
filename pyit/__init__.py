@@ -22,5 +22,8 @@ def run_pyit():
         for runner in runners:
             runner.lint()
 
+        for runner in runners:
+            runner.print_offences()
+
     except KeyboardInterrupt:
         sys.exit(1)

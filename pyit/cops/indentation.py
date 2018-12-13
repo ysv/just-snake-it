@@ -14,7 +14,7 @@ class IndentationCop:
         else:
             self.cop_conf = {**self.DEFAULT_CONFIG, **cop_conf}
 
-    def process_tokens(self, tokens):
+    def process_tokens(self, tokens, filename):
         if not self.cop_conf.get('enabled', True):
             return
 
