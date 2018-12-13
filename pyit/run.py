@@ -7,7 +7,9 @@ from tokenize import tokenize, untokenize, NUMBER, STRING, NAME, OP
 from io import BytesIO
 
 from pyit.cop import *
-from pyit.cops.indentation import *
+from pyit.cops.indentation import IndentationCop
+from pyit.cops.tabs_spaces_identation import TabSpacesIndentationCop
+
 
 
 def get_files_in(root, extension='.py'):
@@ -25,11 +27,13 @@ def get_files_in(root, extension='.py'):
 class Run:
     REGISTERED_COPS = [
         IndentationCop,
+        TabSpacesIndentationCop
     ]
 
     inspection_files = []
     config = dict()
     cops = []
+    lint_result = {}
 
     def __init__(self, package, config):
         abs_path = abspath(package)
@@ -40,11 +44,12 @@ class Run:
             cop_conf = config.value('cops').get(cop_name, None)
             self.cops.append(cop(cop_conf))
 
-
     def lint(self):
         for cop in self.cops:
             for file in self.inspection_files:
                 self.lint_file(cop, file)
+                import code
+                code.interact(local=dict(globals(), **locals()))
 
     def lint_file(self, cop, file):
         if ITokenCop in cop.__implements__:
@@ -52,4 +57,6 @@ class Run:
             tokens = tokenize(readline)
             cop.process_tokens(tokens)
         if IRawFileCop in cop.__implements__:
-            pass
+            f = open(file, 'r')
+            lines = f.read().splitlines()
+            cop.process_file(lines)
