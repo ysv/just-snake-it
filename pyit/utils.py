@@ -40,3 +40,21 @@ def binary_operator_keys():
 
 def binary_operator_values():
     return BINARY_TOKENS.values()
+
+
+RESET = -1
+CYAN = 1
+BLUE = 2
+YELLOW = 3
+RED = 4
+GREEN = 5
+BOLD = 100
+COLORS = {
+        CYAN:   '\033[1;36m',
+        BLUE:   '\033[1;34m',
+        YELLOW: '\033[93m',
+        RED:    '\033[91m',
+        GREEN:  '\033[92m',
+        BOLD:   '\033[;1m',
+        RESET:  '\033[0;0m',
+}

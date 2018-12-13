@@ -22,6 +22,9 @@ def run_pyit():
         for runner in runners:
             runner.lint()
 
+        # Newline before printing offences.
+        print('\n')
+
         for runner in runners:
             runner.print_offences()
 

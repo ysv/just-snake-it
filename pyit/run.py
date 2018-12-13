@@ -3,9 +3,11 @@
 
 from os import walk
 from os.path import isdir, join, splitext, abspath
-from tokenize import tokenize, untokenize, NUMBER, STRING, NAME, OP
+from tokenize import tokenize
 
+from pyit.utils import COLORS, GREEN, RED
 from pyit.cop import *
+
 from pyit.cops.tab_indentation import TabIndentationCop
 from pyit.cops.mixed_indentation import MixedIndentationCop
 from pyit.cops.space_indentation import SpaceIndentationCop
@@ -52,6 +54,10 @@ class Run:
         for cop in self.cops:
             for file in self.inspection_files:
                 self.lint_file(cop, file)
+                color = COLORS[GREEN]
+                if len(cop.offences) != 0:
+                    color = COLORS[RED]
+                print(color + '.', end='')
 
     def lint_file(self, cop, file):
         if ITokenCop in cop.__implements__:

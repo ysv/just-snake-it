@@ -1,6 +1,6 @@
 from pyit.cop import IRawFileCop, Cop
 from pyit.offence import Offence
-from pyit.helpers import *
+from pyit.utils import *
 
 class SpaceIndentationCop(Cop):
 
