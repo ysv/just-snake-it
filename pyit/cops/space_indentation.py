@@ -1,12 +1,23 @@
-from pyit.cop import IRawFileCop, Cop
+from pyit.cop import ITokenCop, Cop
 from pyit.offence import Offence
-from pyit.utils import *
+from token import *
 
 class SpaceIndentationCop(Cop):
 
     COP_CONFIG = {}
+    OPEN_BRACKETS = {
+        '(': LPAR,
+        '[': LSQB,
+        '{': LBRACE,
+    }
 
-    __implements__ = [IRawFileCop]
+    CLOSE_BRACKETS = {
+        '}': RBRACE,
+        ']': RSQB,
+        ')': RPAR,
+    }
+
+    __implements__ = [ITokenCop]
     offences = []
 
     def __init__(self, cop_conf=None):
@@ -19,19 +30,28 @@ class SpaceIndentationCop(Cop):
     def name(cls):
         return 'space_indentation_cop'
 
-    def process_file(self, lines, filename):
+    def process_tokens(self, tokens, filename):
         if not self.processable():
             return
 
-        for i, line in enumerate(lines):
-            line_ident = line.replace(line.lstrip(), '')
+        opened_brackets = 0
 
-            if len(line_ident) % 4 != 0:
-                off = Offence(
-                    cop_name=self.name(),
-                    location=(i + 1, 0),
-                    message="Indentation is not multiple of four.",
-                    filename=filename,
-                    severity='convention'
-                )
-                self.offences.append(off)
+        for i, tkn in enumerate(tokens):
+            if tkn.type in self.CLOSE_BRACKETS.values():
+                opened_brackets -= 1
+
+            if tkn.type in self.OPEN_BRACKETS.values():
+                opened_brackets += 1
+
+            if tkn.type == INDENT:
+                if tkn.string.startswith(' ') and \
+                        len(tkn.string) % 4 != 0 and \
+                        opened_brackets == 0:
+                    off = Offence(
+                        cop_name=self.name(),
+                        location=tkn.start,
+                        message="Indentation is not multiple of four.",
+                        filename=filename,
+                        severity='convention'
+                    )
+                    self.offences.append(off)
