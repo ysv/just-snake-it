@@ -9,6 +9,10 @@
     },
     "space_indentation_cop": {
       "enabled" : true
+    },
+    "line_length_cop": {
+      "enabled" : true,
+      "max_length": 130
     }
   }
 }
