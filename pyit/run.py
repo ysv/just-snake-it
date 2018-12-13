@@ -10,6 +10,7 @@ from pyit.cops.tab_indentation import TabIndentationCop
 from pyit.cops.mixed_indentation import MixedIndentationCop
 from pyit.cops.space_indentation import SpaceIndentationCop
 from pyit.cops.line_length import LineLengthCop
+from pyit.cops.binary_operator_line_brake import BinaryOperatorLineBrakeCop
 
 
 def get_files_in(root, extension='.py'):
@@ -29,7 +30,8 @@ class Run:
         TabIndentationCop,
         MixedIndentationCop,
         SpaceIndentationCop,
-        LineLengthCop
+        LineLengthCop,
+        BinaryOperatorLineBrakeCop
     ]
 
     inspection_files = []
