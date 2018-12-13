@@ -13,6 +13,9 @@
     "line_length_cop": {
       "enabled" : true,
       "max_length": 130
+    },
+    "binary_operator_line_brake": {
+      "enabled" : true
     }
   }
 }
