@@ -2,11 +2,9 @@ from pyit.cop import IRawFileCop, Cop
 from pyit.offence import Offence
 
 
-class TabIndentationCop(Cop):
+class SpaceIndentationCop(Cop):
 
     COP_CONFIG = {}
-
-    TAB_INDENT = '\t'
 
     __implements__ = [IRawFileCop]
     offences = []
@@ -19,20 +17,21 @@ class TabIndentationCop(Cop):
 
     @classmethod
     def name(cls):
-        return 'tab_indentation_cop'
+        return 'space_indentation_cop'
 
     def process_file(self, lines, filename):
         if not self.processable():
             return
 
         for i, line in enumerate(lines):
-            tab_index = line.find(self.TAB_INDENT)
-            if tab_index != -1:
+            line_ident = line.replace(line.lstrip(), '')
+
+            if len(line_ident) % 4 != 0:
                 off = Offence(
                     cop_name=self.name(),
-                    location=(i + 1, tab_index),
-                    message="Indentation contains tab.",
+                    location=(i + 1, 0),
+                    message="Indentation is not multiple of four.",
                     filename=filename,
-                    severity='warning'
+                    severity='convention'
                 )
                 self.offences.append(off)
