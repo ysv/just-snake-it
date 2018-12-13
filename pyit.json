@@ -2,8 +2,8 @@
   "verbose": "true",
   "some_int": 12,
   "cops": {
-    "example_cop": {
-      "enabled" : false
+    "indentation_cop": {
+      "enabled" : true
     }
   }
 }

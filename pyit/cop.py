@@ -1,6 +1,16 @@
 """File with cops"""
 
 
+class Cop:
+    cop_conf = dict()
+
+    DEFAULT_CONFIG = {
+        'enabled': True
+    }
+
+    def processable(self):
+        return self.cop_conf.get('enabled', True)
+
 class ICop:
     cop_conf = dict()
 
