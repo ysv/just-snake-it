@@ -56,7 +56,7 @@ class MixedIndentationCop(Cop):
                     + self.INDENT_TO_NAME[file_indent[1]] + '.'
                 off = Offence(
                     cop_name=self.name(),
-                    location=(index, wrong_indent_index),
+                    location=(index + 1, wrong_indent_index),
                     filename=filename,
                     message=message,
                     severity='convention'

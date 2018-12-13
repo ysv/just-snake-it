@@ -8,6 +8,8 @@ from tokenize import tokenize, untokenize, NUMBER, STRING, NAME, OP
 from pyit.cop import *
 from pyit.cops.tab_indentation import TabIndentationCop
 from pyit.cops.mixed_indentation import MixedIndentationCop
+from pyit.cops.space_indentation import SpaceIndentationCop
+
 
 
 
@@ -26,7 +28,8 @@ def get_files_in(root, extension='.py'):
 class Run:
     REGISTERED_COPS = [
         TabIndentationCop,
-        MixedIndentationCop
+        MixedIndentationCop,
+        SpaceIndentationCop
     ]
 
     inspection_files = []
