@@ -1,5 +1,6 @@
 from pyit.utils import *
 
+
 class Offence:
     # TODO: severity should be in separate class.
     # By design it could be
