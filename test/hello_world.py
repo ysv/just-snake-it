@@ -1,4 +1,6 @@
+
 def hello():
     print('Hello World!')
 
-hello
+class Test:
+    pass

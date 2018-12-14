@@ -2,20 +2,25 @@
   "verbose": false,
   "cops": {
     "mixed_indentation_cop": {
-      "enabled" : true
+      "enabled" : false
     },
     "tab_indentation_cop": {
-      "enabled" : true
+      "enabled" : false
     },
     "space_indentation_cop": {
       "enabled" : false
     },
     "line_length_cop": {
-      "enabled" : true,
+      "enabled" : false,
       "max_length": 120
     },
-    "binary_operator_line_brake": {
-      "enabled" : true
+    "binary_operator_line_brake_cop": {
+      "enabled" : false
+    },
+    "blank_lines_cop": {
+      "enabled" : true,
+      "top_level_blanklines": 2,
+      "nested_level_blanklines": 1
     }
   }
 }
