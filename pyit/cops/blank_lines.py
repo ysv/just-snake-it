@@ -1,13 +1,15 @@
 from pyit.cop import ITokenCop, Cop
 from pyit.offence import Offence
-from pyit.utils import token_line_indent
+from pyit.utils import token_line_indent, is_first_token_except_indent
+from token import ENCODING, DEDENT, COMMENT
 
 
 class BlankLinesCop(Cop):
 
     COP_CONFIG = {
         'top_level_blanklines': 2,
-        'nested_level_blanklines': 1
+        'nested_level_blanklines': 1,
+        'logical_blanklines': 1
     }
 
     NEEDS_BLANK_LINES_OPER = [
@@ -33,59 +35,77 @@ class BlankLinesCop(Cop):
     def nested_level_blanklines(self):
         return self.cop_conf['nested_level_blanklines']
 
+    def logical_blanklines(self):
+        return self.cop_conf['logical_blanklines']
+
     def process_tokens(self, tokens, filename):
         if not self.processable():
             return
 
         # Amount of blank lines in a row before current token.
         blank_lines = 0
-
-        # Amount of blank lines expected before next token.
-        # expected_blank_lines = 0
+        was_class_or_def = False
 
         # TODO: split into methods.
         for tkn in tokens:
             if tkn.line == '\n':
                 blank_lines += 1
+                was_class_or_def = False
+                continue
+
+            # Skip:
+            #   - not first tokens in line except indent.
+            #   - encoding token.
+            #   - dedent.
+            #   - @something.
+            #   - comments.
+            if not is_first_token_except_indent(tkn) \
+                    or tkn.type == ENCODING \
+                    or tkn.type == DEDENT \
+                    or tkn.string == '@'\
+                    or tkn.type == COMMENT:
                 continue
 
             if tkn.string not in self.NEEDS_BLANK_LINES_OPER:
-                print(tkn)
-                print('blanks=', blank_lines)
                 # If there was 0 or 1 blank line it's okay.
-                if blank_lines <= 1:
+                if blank_lines <= self.logical_blanklines():
                     blank_lines = 0
-                    continue
                 else:
-                    blank_lines = 0
+                    msg = "Extra " + str(blank_lines - self.logical_blanklines()) \
+                          + " logical blank line found."
                     off = Offence(
                         cop_name=self.name(),
                         location=tkn.start,
-                        message="Extra blank lines found",
-                        severity='convention',
+                        message=msg,
+                        severity='refactor',
                         filename=filename
                     )
+                    blank_lines = 0
                     self.offences.append(off)
-                    continue
+                was_class_or_def = False
+                continue
 
             # Otherwise we have 'def' or 'class' token.
             token_indent = token_line_indent(tkn)
 
-            # If top level indent required.
             if token_indent == '':
                 expected_blanklines = self.top_level_blanklines()
             else:
                 expected_blanklines = self.nested_level_blanklines()
 
-            if blank_lines != expected_blanklines:
-                msg = "Expected " + str(expected_blanklines) + " but found " + str(blank_lines)
+            if blank_lines != expected_blanklines \
+                    and tkn.start[0] not in [1, 2] \
+                    and not was_class_or_def:
+                msg = "Expected " + str(expected_blanklines) \
+                      + " but found " + str(blank_lines) + '.'
                 off = Offence(
                     cop_name=self.name(),
                     location=tkn.start,
                     message=msg,
-                    severity='convention',
+                    severity='refactor',
                     filename=filename
                 )
                 self.offences.append(off)
 
+            was_class_or_def = True
             blank_lines = 0

@@ -87,6 +87,7 @@ class Config:
             return key in self.conf
 
     class NullCoercion:
+
         def coerce(self, value):
             return value
 

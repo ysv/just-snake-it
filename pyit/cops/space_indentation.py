@@ -2,6 +2,7 @@ from pyit.cop import ITokenCop, Cop
 from pyit.offence import Offence
 from token import *
 
+
 class SpaceIndentationCop(Cop):
 
     COP_CONFIG = {}
