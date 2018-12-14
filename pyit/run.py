@@ -13,6 +13,7 @@ from pyit.cops.mixed_indentation import MixedIndentationCop
 from pyit.cops.space_indentation import SpaceIndentationCop
 from pyit.cops.line_length import LineLengthCop
 from pyit.cops.binary_operator_line_brake import BinaryOperatorLineBrakeCop
+from pyit.cops.blank_lines import BlankLinesCop
 
 
 def get_files_in(root, extension='.py'):
@@ -33,7 +34,8 @@ class Run:
         MixedIndentationCop,
         SpaceIndentationCop,
         LineLengthCop,
-        BinaryOperatorLineBrakeCop
+        BinaryOperatorLineBrakeCop,
+        BlankLinesCop
     ]
 
     inspection_files = []
@@ -65,19 +67,19 @@ class Run:
     # TODO: Beautiful Exceptions (save skipped files).
     def lint_file(self, cop, file):
         if ITokenCop in cop.__implements__:
-            try:
+            # try:
                 readline = open(file, 'rb').__next__
                 tokens = tokenize(readline)
                 cop.process_tokens(tokens, file)
-            except Exception as e:
-                return -1
+            # except Exception as e:
+            #     return -1
         if IRawFileCop in cop.__implements__:
-            try:
+            # try:
                 f = open(file, 'r')
                 lines = f.read().splitlines()
                 cop.process_file(lines, file)
-            except Exception as e:
-                return -1
+            # except Exception as e:
+            #     return -1
 
         return len(cop.offences)
 
