@@ -1,9 +1,10 @@
 
 """ Class which receive package name and call code linting. """
 
-from os import walk
-from os.path import isdir, join, splitext, abspath
+from os import walk, mkdir
+from os.path import isdir, join, splitext, abspath, split, dirname
 from tokenize import tokenize
+import time
 
 from pyit.utils import COLORS, GREEN, YELLOW, RED
 from pyit.cop import *
@@ -14,6 +15,8 @@ from pyit.cops.space_indentation import SpaceIndentationCop
 from pyit.cops.line_length import LineLengthCop
 from pyit.cops.binary_operator_line_brake import BinaryOperatorLineBrakeCop
 from pyit.cops.blank_lines import BlankLinesCop
+from pyit.cops.multiple_import import MultipleImport
+
 
 
 def get_files_in(root, extension='.py'):
@@ -35,7 +38,8 @@ class Run:
         SpaceIndentationCop,
         LineLengthCop,
         BinaryOperatorLineBrakeCop,
-        BlankLinesCop
+        BlankLinesCop,
+        MultipleImport
     ]
 
     inspection_files = []
@@ -44,8 +48,13 @@ class Run:
     lint_result = {}
 
     def __init__(self, package, config):
-        abs_path = abspath(package)
-        self.inspection_files = get_files_in(abs_path)
+        self.abs_path = abspath(package)
+        if isdir(package):
+            self.dir_path = self.abs_path
+        else:
+            self.dir_path = dirname(self.abs_path)
+
+        self.inspection_files = get_files_in(self.abs_path)
         self.config = config
         for cop in self.REGISTERED_COPS:
             cop_name = cop.name()
@@ -67,19 +76,19 @@ class Run:
     # TODO: Beautiful Exceptions (save skipped files).
     def lint_file(self, cop, file):
         if ITokenCop in cop.__implements__:
-            # try:
+            try:
                 readline = open(file, 'rb').__next__
                 tokens = tokenize(readline)
                 cop.process_tokens(tokens, file)
-            # except Exception as e:
-            #     return -1
+            except Exception as e:
+                return -1
         if IRawFileCop in cop.__implements__:
-            # try:
+            try:
                 f = open(file, 'r')
                 lines = f.read().splitlines()
                 cop.process_file(lines, file)
-            # except Exception as e:
-            #     return -1
+            except Exception as e:
+                return -1
 
         return len(cop.offences)
 
@@ -87,3 +96,23 @@ class Run:
         for cop in self.cops:
             for off in cop.offences:
                 print(off)
+
+    def format(self):
+        head, tail = split(self.dir_path)
+        linted_dir = join(head, 'linted_' + str(int(time.time())))
+
+        mkdir(linted_dir)
+
+        for cop in self.cops:
+            for file in self.inspection_files:
+                if IFormatCop in cop.__implements__:
+                    try:
+                        readline = open(file, 'rb').__next__
+                        tokens = tokenize(readline)
+                        fixed_bytes = cop.fix_tokens(tokens, file)
+                        outp_path = file.replace(self.dir_path, linted_dir)
+                        output_file = open(outp_path, 'w')
+                        output_file.write(fixed_bytes.decode("utf-8"))
+                    except Exception as e:
+                        print(e)
+                        continue

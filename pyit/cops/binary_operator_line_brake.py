@@ -41,6 +41,6 @@ class BinaryOperatorLineBrakeCop(Cop):
                         location=tkn.start,
                         message="Line brake after binary operator '" + str(tkn.string) + "' detected.",
                         filename=filename,
-                        severity='refactor'
+                        severity='convention'
                     )
                     self.offences.append(off)

@@ -11,6 +11,7 @@ class Cop:
     def processable(self):
         return self.cop_conf.get('enabled', True)
 
+
 class ICop:
     cop_conf = dict()
 
@@ -26,4 +27,9 @@ class ITokenCop(ICop):
 
 class IRawFileCop(ICop):
     def process_file(self, lines, filename):
+        """Method receives list of file lines and process them one by one."""
+
+
+class IFormatCop(ICop):
+    def fix_tokens(self, tokens, filename):
         """Method receives list of file lines and process them one by one."""
