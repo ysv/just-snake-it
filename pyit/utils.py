@@ -51,6 +51,9 @@ def is_first_token_except_indent(token):
     indent = token_line_indent(token)
     return token.start[1] == len(indent)
 
+def line_indent(line):
+    return line.replace(line.lstrip(), '')
+
 RESET = -1
 CYAN = 1
 BLUE = 2

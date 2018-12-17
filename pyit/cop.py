@@ -31,5 +31,5 @@ class IRawFileCop(ICop):
 
 
 class IFormatCop(ICop):
-    def fix_tokens(self, tokens, filename):
+    def fix_format(self, lines, filename):
         """Method receives list of file lines and process them one by one."""
