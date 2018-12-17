@@ -77,7 +77,7 @@ class BlankLinesCop(Cop):
                         cop_name=self.name(),
                         location=tkn.start,
                         message=msg,
-                        severity='refactor',
+                        severity='convention',
                         filename=filename
                     )
                     blank_lines = 0
@@ -102,7 +102,7 @@ class BlankLinesCop(Cop):
                     cop_name=self.name(),
                     location=tkn.start,
                     message=msg,
-                    severity='refactor',
+                    severity='convention',
                     filename=filename
                 )
                 self.offences.append(off)

@@ -22,7 +22,7 @@ class Offence:
     RESET_COLOR = COLORS[RESET]
     BOLD_COLOR = COLORS[BOLD]
 
-    def __init__(self, cop_name, location, message, filename=None, severity='refactor'):
+    def __init__(self, cop_name, location, message, filename=None, severity='convention'):
         self.cop_name = cop_name
         self.location = location
         self.message = message

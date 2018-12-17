@@ -22,6 +22,9 @@
       "top_level_blanklines": 2,
       "nested_level_blanklines": 1,
       "logical_blanklines": 1
+    },
+    "multiple_import_cop": {
+      "enabled" : true
     }
   }
 }
