@@ -1,11 +1,11 @@
 from pyit.cop import IRawFileCop, Cop, IFormatCop
-from pyit.utils import line_indent
 from tokenize import tokenize, untokenize
 from pyit.offence import Offence
 from io import BytesIO
+import re
 
 
-class MultipleImport(Cop):
+class ExpressionWhitespace(Cop):
 
     COP_CONFIG = {}
     __implements__ = [IFormatCop]
@@ -20,26 +20,32 @@ class MultipleImport(Cop):
 
     @classmethod
     def name(cls):
-        return 'multiple_import_cop'
+        return 'import_cop'
 
     def process_file(self, lines, filename):
         pass
 
     def fix_format(self, lines, filename):
-        res = []
 
-        # processed_lines = 0
-        for line in lines:
-            if not line.lstrip().startswith('import'):
-                res.append(line)
-                continue
-
-            indent = line_indent(line)
-            spl = line.split(',')
-            first_import = spl.pop(0).split()[1]
-            spl.insert(0, first_import)
-            for import_name in spl:
-                res.append(indent + 'import ' + import_name + '\n')
+        mid_res = self.fix_brackets(lines)
         # import code
         # code.interact(local=dict(globals(), **locals()))
-        return res
+
+        return mid_res
+
+    def fix_brackets(self, file):
+        new_lines = []
+        for line in file:
+            # Fix Brackets.
+            line = re.sub(r'.+\s+', ' ', line)
+            line = re.sub(r'\(\s+', '(', line)
+            line = re.sub(r'\s+\)', ')', line)
+
+            line = re.sub(r'\[\s+', '(', line)
+            line = re.sub(r'\s+\]', ')', line)
+
+            line = re.sub(r'\s+:', ':', line)
+            new_lines.append(line)
+
+        return new_lines
+

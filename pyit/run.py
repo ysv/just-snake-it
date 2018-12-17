@@ -16,7 +16,7 @@ from pyit.cops.line_length import LineLengthCop
 from pyit.cops.binary_operator_line_brake import BinaryOperatorLineBrakeCop
 from pyit.cops.blank_lines import BlankLinesCop
 from pyit.cops.multiple_import import MultipleImport
-
+from pyit.cops.expression_whitespace import ExpressionWhitespace
 
 
 def get_files_in(root, extension='.py'):
@@ -39,7 +39,8 @@ class Run:
         LineLengthCop,
         BinaryOperatorLineBrakeCop,
         BlankLinesCop,
-        MultipleImport
+        MultipleImport,
+        ExpressionWhitespace
     ]
 
     inspection_files = []
@@ -103,16 +104,18 @@ class Run:
 
         mkdir(linted_dir)
 
-        for cop in self.cops:
-            for file in self.inspection_files:
+        for file in self.inspection_files:
+            f = open(file, 'r')
+            lines = f.read().splitlines(keepends=True)
+            for cop in self.cops:
                 if IFormatCop in cop.__implements__:
                     try:
-                        readline = open(file, 'rb').__next__
-                        tokens = tokenize(readline)
-                        fixed_bytes = cop.fix_tokens(tokens, file)
-                        outp_path = file.replace(self.dir_path, linted_dir)
-                        output_file = open(outp_path, 'w')
-                        output_file.write(fixed_bytes.decode("utf-8"))
+                        lines = cop.fix_format(lines, file)
                     except Exception as e:
                         print(e)
                         continue
+
+            outp_path = file.replace(self.dir_path, linted_dir)
+            output_file = open(outp_path, 'w')
+            fixed_line = ''.join(str(x) for x in lines)
+            output_file.write(fixed_line)
